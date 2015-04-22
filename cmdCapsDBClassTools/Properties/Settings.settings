@@ -12,7 +12,7 @@
       <Value Profile="(Default)">[Encrypt:Data Source=caps-sqldev1.caps.ua.edu;User ID=sa;Password=Si9r1e1n]</Value>
     </Setting>
     <Setting Name="DefaultExcludeTables" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">'CLRDataTypeConversions', 'INS_Company', 'INS_Service', 'INS_OutOfStateNAIC', 'INS_NAIC', 'INS_ContactNAICLink', 'INS_Contact'</Value>
+      <Value Profile="(Default)">'CLRDataTypeConversions', 'INS_Company', 'INS_Service', 'INS_OutOfStateNAIC', 'INS_NAIC', 'INS_ContactNAICLink', 'INS_Contact', 'LUT_VIMS_To_Registration_Mapping'</Value>
     </Setting>
     <Setting Name="DefaultClassNamespace" Type="System.String" Scope="Application">
       <Value Profile="(Default)">DORResources</Value>

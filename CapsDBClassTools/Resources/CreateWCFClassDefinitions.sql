@@ -8,6 +8,8 @@ DECLARE @IWcfClass VARCHAR(MAX)
 DECLARE @Methods VARCHAR(MAX) = ''
 DECLARE @IMethods VARCHAR(MAX) = ''
 DECLARE @TableName VARCHAR(255)
+DECLARE @GetList VARCHAR(MAX)
+DECLARE @GetParms VARCHAR(MAX)
 DECLARE @listID INT
 SELECT @listID = MAX(TableID)
 FROM @TableInfoList
@@ -17,6 +19,13 @@ BEGIN
 	SELECT @TableName = TableName
 	FROM @TableInfoList
 	WHERE TableID = @listID
+
+	SELECT @GetParms  = COALESCE(@GetParms + ', '+DotNetCLRDataType+' '+ColumnName,
+								DotNetCLRDataType+' '+ColumnName),
+		@GetList = COALESCE(@GetList + ', '+ColumnName, ColumnName)
+	FROM @TableInfoList
+	WHERE TableID = @listID
+		AND key_ordinal IS NOT NULL
 
 	SELECT @Methods += '
         #region '+@TableName+'
@@ -32,11 +41,11 @@ BEGIN
             }
         }
 
-        public '+@TableName+' Get'+@TableName+'(int id)
+        public '+@TableName+' Get'+@TableName+'('+@GetParms+')
         {
             try
             {
-                return new '+@TableName+'Controller().Get'+@TableName+'(id);
+                return new '+@TableName+'Controller().Get'+@TableName+'('+@GetList+');
             }
             catch (Exception ex)
             {
@@ -56,11 +65,11 @@ BEGIN
             }
         }
 
-        public '+@TableName+' Update'+@TableName+'(int id, '+@TableName+' '+LOWER(@TableName)+')
+        public '+@TableName+' Update'+@TableName+'('+@GetParms+', '+@TableName+' '+LOWER(@TableName)+')
         {
             try
             {
-                return new '+@TableName+'Controller().Put'+@TableName+'(id, '+LOWER(@TableName)+');
+                return new '+@TableName+'Controller().Put'+@TableName+'('+@GetList+', '+LOWER(@TableName)+');
             }
             catch (Exception ex)
             {
@@ -76,18 +85,20 @@ BEGIN
         IList<'+@TableName+'> Get'+@TableName+'();
 
         [OperationContract]
-        '+@TableName+' Get'+@TableName+'(int id);
+        '+@TableName+' Get'+@TableName+'('+@GetParms+');
 
         [OperationContract]
         '+@TableName+' Insert'+@TableName+'('+@TableName+' '+LOWER(@TableName)+');
 
         [OperationContract]
-        '+@TableName+' Update'+@TableName+'(int id, '+@TableName+' '+LOWER(@TableName)+');
+        '+@TableName+' Update'+@TableName+'('+@GetParms+', '+@TableName+' '+LOWER(@TableName)+');
         #endregion
 '
 
 	SET @listID -= 1
 	SET @TableName = NULL
+	SET @GetList = NULL
+	SET @GetParms = NULL
 END
 
 SELECT @WcfClass = '

@@ -53,7 +53,8 @@ namespace cmdCapsDBClassTools.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("\'CLRDataTypeConversions\', \'INS_Company\', \'INS_Service\', \'INS_OutOfStateNAIC\', \'IN" +
-            "S_NAIC\', \'INS_ContactNAICLink\', \'INS_Contact\'")]
+            "S_NAIC\', \'INS_ContactNAICLink\', \'INS_Contact\', \'LUT_VIMS_To_Registration_Mapping" +
+            "\'")]
         public string DefaultExcludeTables {
             get {
                 return ((string)(this["DefaultExcludeTables"]));
