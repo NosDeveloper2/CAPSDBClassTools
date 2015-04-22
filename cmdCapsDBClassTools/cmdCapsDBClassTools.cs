@@ -111,7 +111,7 @@ namespace cmdCapsDBClassTools
                 if (!string.IsNullOrEmpty(options.References)) Console.WriteLine("References: {0}", options.References);
                 if (!string.IsNullOrEmpty(options.IndividualTable)) Console.WriteLine("IndividualTable: {0}", options.IndividualTable);
                 if (options.SeperateCRUD) Console.WriteLine("SeperateCRUD: {0}", options.SeperateCRUD);
-                if (options.SingleClassType != null) Console.WriteLine("SingleClass: {0}", options.SingleClassType);
+                if (options.SingleClassType != ObjectType.Default) Console.WriteLine("SingleClass: {0}", options.SingleClassType);
             }
             else
             {
@@ -133,33 +133,16 @@ namespace cmdCapsDBClassTools
 
             try
             {
-                if (options.SingleClassType == null)
-                {
-                    new CapsDBClassTools.CreateObjects(
-                        options.ConnectionString,
-                        options.DestinationFilePath,
-                        options.ClassNamespace,
-                        options.Database,
-                        options.ExcludeTables,
-                        options.References,
-                        options.IndividualTable,
-                        options.SeperateCRUD
-                    );
-                }
-                else
-                {
-                    new CapsDBClassTools.CreateObjects(
-                        options.ConnectionString,
-                        options.DestinationFilePath,
-                        options.ClassNamespace,
-                        options.Database,
-                        options.ExcludeTables,
-                        options.References,
-                        options.IndividualTable,
-                        options.SeperateCRUD,
-                        options.SingleClassType
-                    );
-                }
+                new CapsDBClassTools.CreateObjects(
+                    options.ConnectionString,
+                    options.DestinationFilePath,
+                    options.ClassNamespace,
+                    options.Database,
+                    options.ExcludeTables,
+                    options.References,
+                    options.IndividualTable,
+                    options.SeperateCRUD,
+                    options.SingleClassType);
             }
             catch (Exception ex)
             {
@@ -178,19 +161,16 @@ namespace cmdCapsDBClassTools
         [Option('f', "destination-file-path", Required = false, HelpText = "Files output destination.")]
         public string DestinationFilePath { get; set; }
 
-        [Option('o', "overwrite-all", Required = false, HelpText = "Force overwrite.")]
-        public string Overwrite { get; set; }
-
         [Option('n', "namespace", Required = false, HelpText = "Namespace for output class files")]
         public string ClassNamespace { get; set; }
 
-        [Option('d', "database", Required = false, HelpText = "database for output class files")]
+        [Option('d', "database", Required = false, HelpText = "Database for output class files")]
         public string Database { get; set; }
 
-        [Option('r', "class-references", Required = false, HelpText = "Class refernces for output class files")]
+        [Option('r', "class-references", Required = false, HelpText = "Class references for output class files")]
         public string References { get; set; }
 
-        [Option('x', "tables-to-exclude", Required = false, HelpText = "semi colon (;) delimited List of tables to exclude from creating classes for")]
+        [Option('x', "tables-to-exclude", Required = false, HelpText = "Use quotes for more than one object and commas to delimit a list of tables to exclude class creation")]
         public string ExcludeTables { get; set; }
 
         [Option('t', "individual-tables", Required = false, HelpText = "Single table to have classes created")]
