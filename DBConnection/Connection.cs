@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
-using ConfigEncrypt;
 
 namespace DBConnection
 {
-    public class DBConnection
+    public class Connection
     {
         #region Fields
         public string ConnectionString { get; set; }
-        public SqlConnection Connection { get; set; }
+        public SqlConnection sqlConnection { get; set; }
         public SqlCommand Command { get; set; }
         public List<DbParameter> OutParameters { get; private set; }
         #endregion
@@ -20,7 +19,7 @@ namespace DBConnection
         /// <summary>
         /// Default Constructor will automatically create Connection to locally defined ConnectionString
         /// </summary>
-        public DBConnection()
+        public Connection()
         {
         }
 
@@ -28,7 +27,7 @@ namespace DBConnection
         /// Constutor that overrides local ConnectionString
         /// </summary>
         /// <param name="connectionString"></param>
-        public DBConnection(string connectionString)
+        public Connection(string connectionString)
         {
             ConnectionString = connectionString;
         }
@@ -39,22 +38,22 @@ namespace DBConnection
         {
             try
             {
-                Connection = new SqlConnection(ConnectionString);
-                Connection.Open();
+                sqlConnection = new SqlConnection(ConnectionString);
+                sqlConnection.Open();
 
             }
             catch (Exception ex)
             {
-                Connection.Close();
+                sqlConnection.Close();
                 throw new Exception(ex.Message);
             }
         }
 
         private void Close()
         {
-            if (Connection != null)
+            if (sqlConnection != null)
             {
-                Connection.Close();
+                sqlConnection.Close();
             }
         }
         #endregion
@@ -72,11 +71,11 @@ namespace DBConnection
         {
             object returnObject = null;
 
-            if (Connection != null)
+            if (sqlConnection != null)
             {
-                if (Connection.State == ConnectionState.Open)
+                if (sqlConnection.State == ConnectionState.Open)
                 {
-                    Command = new SqlCommand(commandText, Connection);
+                    Command = new SqlCommand(commandText, sqlConnection);
                     Command.CommandType = commandType;
 
                     if (parameters != null)

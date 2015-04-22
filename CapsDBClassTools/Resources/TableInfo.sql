@@ -58,8 +58,10 @@ DECLARE @tableinfo VARCHAR(MAX) = '
 			AND C.COLUMN_NAME = sC.name
 	LEFT OUTER JOIN '+@Database+'.sys.key_constraints KC
 		ON sT.object_id = KC.parent_object_id
+			AND KC.type = ''PK''
 	LEFT OUTER JOIN '+@Database+'.sys.index_columns IXC
 		ON KC.parent_object_id = IXC.object_id
+			AND KC.unique_index_id = IXC.index_id
 			AND sC.column_id = IXC.column_id
 	ORDER BY T.TableID, C.ORDINAL_POSITION
 '

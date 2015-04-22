@@ -27,8 +27,9 @@ BEGIN
 	/*
 	-- Create parameters
 	*/
-	SELECT @TableName = TableName,
-
+	SELECT 
+		/*Tablename*/
+		@TableName = TableName,
 		/*All columns as parameters*/
 		@AllParams = COALESCE(@AllParams + ',' + @crlf + @tab 
 						+ '@' + ColumnName + ' '
@@ -37,6 +38,7 @@ BEGIN
 								WHEN SqlServerDataType IN ('CHAR', 'NCHAR', 'VARCHAR', 'NVARCHAR', 'NUMERIC', 'DECIMAL')
 									THEN CASE
 											WHEN SqlServerDataType IN ('NUMERIC', 'DECIMAL') THEN '('+CONVERT(VARCHAR(25), [Precision]) + ',' + CONVERT(VARCHAR(25), Scale )+')'
+											WHEN ColMaxLength = -1 THEN '(MAX)'
 											ELSE '('+CONVERT(VARCHAR(25), ColMaxLength)+')'
 										END
 								ELSE ''
@@ -48,49 +50,12 @@ BEGIN
 								WHEN SqlServerDataType IN ('CHAR', 'NCHAR', 'VARCHAR', 'NVARCHAR', 'NUMERIC', 'DECIMAL')
 									THEN CASE
 											WHEN SqlServerDataType IN ('NUMERIC', 'DECIMAL') THEN '('+CONVERT(VARCHAR(25), [Precision]) + ',' + CONVERT(VARCHAR(25), Scale ) +')'
+											WHEN ColMaxLength = -1 THEN '(MAX)'
 											ELSE '('+CONVERT(VARCHAR(25), ColMaxLength)+')'
 										END
 								ELSE ''
 							END
 						),
-		/*Key Parameters*/
-		@KeyParams = CASE
-						WHEN key_ordinal = 1
-							THEN COALESCE(@KeyParams + ',' + @crlf + @tab 
-									+ '@' + ColumnName + ' '
-									+CASE
-											WHEN SqlServerDataType IN ('CHAR', 'NCHAR', 'VARCHAR', 'NVARCHAR', 'NUMERIC', 'DECIMAL')
-												THEN CASE
-														WHEN SqlServerDataType IN ('NUMERIC', 'DECIMAL') THEN SqlServerDataType + '('+CONVERT(VARCHAR(25), [Precision]) + ',' + CONVERT(VARCHAR(25), Scale ) +')'
-														ELSE SqlServerDataType + '('+CONVERT(VARCHAR(25), ColMaxLength)+')'
-													END
-											ELSE SqlServerDataType
-										END,
-
-									'@'+ColumnName + ' '
-										+CASE
-											WHEN SqlServerDataType IN ('CHAR', 'NCHAR', 'VARCHAR', 'NVARCHAR', 'NUMERIC', 'DECIMAL')
-												THEN CASE
-														WHEN SqlServerDataType IN ('NUMERIC', 'DECIMAL') THEN SqlServerDataType + '('+CONVERT(VARCHAR(25), [Precision]) + ',' + CONVERT(VARCHAR(25), Scale ) +')'
-														ELSE SqlServerDataType + '('+CONVERT(VARCHAR(25), ColMaxLength)+')'
-													END
-											ELSE SqlServerDataType
-										END
-									)
-						ELSE @KeyParams
-					END,
-		/*Set List*/
-		@SetList = COALESCE(@SetList + ',' + @CRLF + @tab + 'CASE WHEN @'+ColumnName+' != T.['+ColumnName+'] THEN @'+ColumnName+' ELSE T.'+ColumnName+' END',
-						'CASE WHEN @'+ColumnName+' != T.['+ColumnName+'] THEN @'+ColumnName+' ELSE T.'+ColumnName+' END'),
-		/*Where List*/
-		@WhereList = CASE
-						WHEN key_ordinal = 1
-							THEN COALESCE(
-									@WhereList + @crlf + @tab + @tab + 'AND ' + ColumnName + ' = @' + ColumnName,
-									ColumnName + ' = @' + ColumnName
-								)
-						ELSE @WhereList
-					END,
 		/*Column List*/
 		@ColList = COALESCE(@ColList + ',' + @CRLF + @tab + ColumnName, ColumnName),
 		/*Insert Parameters List*/
@@ -98,11 +63,53 @@ BEGIN
 	FROM @TableInfoList
 	WHERE TableID = @listID
 
+	SELECT 
+		/*Set List*/
+		@SetList = COALESCE(@SetList + ',' + @CRLF + @tab + 'T.['+ColumnName+']  = CASE WHEN @'+ColumnName+' != T.['+ColumnName+'] THEN @'+ColumnName+' ELSE T.'+ColumnName+' END',
+										'T.['+ColumnName+']  = CASE WHEN @'+ColumnName+' != T.['+ColumnName+'] THEN @'+ColumnName+' ELSE T.'+ColumnName+' END')
+	FROM @TableInfoList
+	WHERE TableID = @listID
+		AND ISNULL(key_ordinal, 0) = 0
+
+	SELECT
+		/*Key Parameters*/
+		@KeyParams = COALESCE(
+						@KeyParams + ',' + @crlf + @tab 
+						+ '@' + ColumnName + ' '
+						+CASE
+								WHEN SqlServerDataType IN ('CHAR', 'NCHAR', 'VARCHAR', 'NVARCHAR', 'NUMERIC', 'DECIMAL')
+									THEN CASE
+											WHEN SqlServerDataType IN ('NUMERIC', 'DECIMAL') THEN SqlServerDataType + '('+CONVERT(VARCHAR(25), [Precision]) + ',' + CONVERT(VARCHAR(25), Scale ) +')'
+											WHEN ColMaxLength = -1 THEN '(MAX)'
+											ELSE SqlServerDataType + '('+CONVERT(VARCHAR(25), ColMaxLength)+')'
+										END
+								ELSE SqlServerDataType
+							END,
+
+						'@'+ColumnName + ' '
+							+CASE
+								WHEN SqlServerDataType IN ('CHAR', 'NCHAR', 'VARCHAR', 'NVARCHAR', 'NUMERIC', 'DECIMAL')
+									THEN CASE
+											WHEN SqlServerDataType IN ('NUMERIC', 'DECIMAL') THEN SqlServerDataType + '('+CONVERT(VARCHAR(25), [Precision]) + ',' + CONVERT(VARCHAR(25), Scale ) +')'
+											WHEN ColMaxLength = -1 THEN '(MAX)'
+											ELSE SqlServerDataType + '('+CONVERT(VARCHAR(25), ColMaxLength)+')'
+										END
+								ELSE SqlServerDataType
+							END
+						),
+		/*Where List*/
+		@WhereList = COALESCE(
+							@WhereList + @crlf + @tab + @tab + 'AND ' + ColumnName + ' = @' + ColumnName,
+							ColumnName + ' = @' + ColumnName
+						)
+	FROM @TableInfoList
+	WHERE TableID = @listID
+		AND ISNULL(key_ordinal, 0) >= 1
 
 	/*
-	-- Create definitions
+	 Create definitions
 	*/
-	-- Delete Procedure
+	/*Delete Procedure*/
 	SELECT @deleteProcDef = '
 IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = ''proc_'+@TableName+'_Delete'' AND ROUTINE_SCHEMA = ''dbo'')
 BEGIN
@@ -122,7 +129,7 @@ WHERE '+@WhereList+'
 GO
 '
 
-	-- Get Procedure
+	/*Get Procedure*/
 	SELECT @getProcDef = '
 IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = ''proc_'+@TableName+'_Get'' AND ROUTINE_SCHEMA = ''dbo'')
 BEGIN
@@ -142,7 +149,7 @@ WHERE '+@WhereList+'
 GO
 '
 
-	-- Get All Procedure
+	/* Get All Procedure*/
 	SELECT @getallProcDef = '
 IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = ''proc_'+@TableName+'_GetAll'' AND ROUTINE_SCHEMA = ''dbo'')
 BEGIN
@@ -159,7 +166,7 @@ FROM [dbo].['+@TableName+']
 GO
 '
 
-	-- Insert Procedure
+	/* Insert Procedure*/
 	SELECT @insertProcDef = '
 IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = ''proc_'+@TableName+'_Insert'' AND ROUTINE_SCHEMA = ''dbo'')
 BEGIN
@@ -181,7 +188,7 @@ END
 GO
 '
 
-	-- Update Procedure
+	/* Update Procedure*/
 	SELECT @updateProcDef = '
 IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = ''proc_'+@TableName+'_Update'' AND ROUTINE_SCHEMA = ''dbo'')
 BEGIN
@@ -204,10 +211,13 @@ GO
 
 
 	/*
-	-- Insert definitions
+	Insert definitions
 	*/
+
+	/*
 	INSERT INTO @Objects(ObjectName, ObjectDefinition, ObjectType)
 	VALUES('proc_'+@TableName+'_Delete', @deleteProcDef, 5) /*5==StoredProcedures*/
+	*/
 	
 	INSERT INTO @Objects(ObjectName, ObjectDefinition, ObjectType)
 	VALUES('proc_'+@TableName+'_Get', @getProcDef, 5) /*5==StoredProcedures*/
@@ -233,7 +243,7 @@ GO
 
 
 	/*
-	--Clean Parameters for next iteration
+	Clean Parameters for next iteration
 	*/
 	SET @listID -= 1
 

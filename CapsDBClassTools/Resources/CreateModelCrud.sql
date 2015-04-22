@@ -47,10 +47,15 @@ BEGIN
 	WHERE TableID = @listID
 
 	SELECT @Class = '
+using System;
+using System.Collections.Generic;
+using System.Data;
+using DBConnection;
 '+ISNULL(@References, '')+'
-namespace '+@NameSpace+'
+
+namespace '+@NameSpace+'.Model
 {	
-	[DBClass(typeof('+@TableName+'), "'+@TableName+'", "'+@TableName+'", "proc_'+@TableName+'_Get", "proc_'+@TableName+'_GetAll", "proc_'+@TableName+'_Update", "proc_'+@TableName+'_Delete", "proc_'+@TableName+'_Insert")]
+	[DBClass(typeof('+@TableName+'), "'+@TableName+'", "'+@TableName+'")]
 	public class '+@TableName+'CRUD : '+@TableName+'
 	{
 		#region SpNames
@@ -64,34 +69,34 @@ namespace '+@NameSpace+'
 		#region Methods
 		private static '+@TableName+'[] '+@TableName+'Array()
 		{
-			var dbconn = new DBConnection();
+			var dbconn = new Connection();
 			return dbconn.ExecuteList<'+@TableName+'>(GetAllProc).ToArray();
 		}
 
 		public void Update('+@TableName+' '+LOWER(@TableName)+')
 		{
-			var dbconn = new DBConnection();
+			var dbconn = new Connection();
 			var paramlist = dbconn.CreateParamList('+LOWER(@TableName)+', ParamListType.Update);
 			dbconn.ExecuteNonQuery(GetUpdateProc, paramlist);
 		}
 
 		public void Insert('+@TableName+' '+LOWER(@TableName)+')
 		{
-			var dbconn = new DBConnection();
+			var dbconn = new Connection();
 			var paramlist = dbconn.CreateParamList('+LOWER(@TableName)+', ParamListType.Insert);
 			dbconn.ExecuteNonQuery(GetInsertProc, paramlist);
 		}
 
 		public void Delete('+@TableName+' '+LOWER(@TableName)+')
 		{
-			var dbconn = new DBConnection();
+			var dbconn = new Connection();
 			var paramlist = dbconn.CreateParamList('+LOWER(@TableName)+', ParamListType.Delete);
 			dbconn.ExecuteNonQuery(GetDeleteProc, paramlist);
 		}
 
 		public '+@TableName+' Get('+@GetParms+')
 		{
-			var dbconn = new DBConnection();
+			var dbconn = new Connection();
 			var paramlist = new List<DbParameter>() {'+@GetList+'};
 			return dbconn.ExecuteSingle<'+@TableName+'>(GetProc, paramlist);
 		}

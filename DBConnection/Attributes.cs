@@ -14,11 +14,6 @@ namespace DBConnection
         private Type _classtype;
         private string _classname;
         private string _referencedtable;
-        private string _getsp;
-        private string _getallsp;
-        private string _savesp;
-        private string _deletesp;
-        private string _insertsp;
         #endregion
 
         #region Properties
@@ -57,66 +52,6 @@ namespace DBConnection
                 this._referencedtable = value;
             }
         }
-
-        public string GetProcedureName
-        {
-            get
-            {
-                return _getsp;
-            }
-            set
-            {
-                this._getsp = value;
-            }
-        }
-
-        public string GetAllProcedurename
-        {
-            get
-            {
-                return _getallsp;
-            }
-            set
-            {
-                this._getallsp = value;
-            }
-        }
-
-        public string SaveProcedurename
-        {
-            get
-            {
-                return _savesp;
-            }
-            set
-            {
-                this._savesp = value;
-            }
-        }
-
-        public string DeleteProcedurename
-        {
-            get
-            {
-                return _deletesp;
-            }
-            set
-            {
-                this._deletesp = value;
-            }
-        }
-
-        public string InsertProcedurename
-        {
-            get
-            {
-                return _insertsp;
-            }
-            set
-            {
-                this._insertsp = value;
-            }
-        }
         #endregion
 
         #region Constructors
@@ -135,51 +70,6 @@ namespace DBConnection
             this._classtype = ClassType;
             this._classname = Name;
             this._referencedtable = TableReference;
-        }
-        public DBClass(Type ClassType, string Name, string TableReference, string GetProcedureName)
-        {
-            this._classtype = ClassType;
-            this._classname = Name;
-            this._referencedtable = TableReference;
-            this._getsp = GetProcedureName;
-        }
-        public DBClass(Type ClassType, string Name, string TableReference, string GetProcedureName, string GetAllProcedurename)
-        {
-            this._classtype = ClassType;
-            this._classname = Name;
-            this._referencedtable = TableReference;
-            this._getsp = GetProcedureName;
-            this._getallsp = GetAllProcedurename;
-        }
-        public DBClass(Type ClassType, string Name, string TableReference, string GetProcedureName, string GetAllProcedurename, string SaveProcedurename)
-        {
-            this._classtype = ClassType;
-            this._classname = Name;
-            this._referencedtable = TableReference;
-            this._getsp = GetProcedureName;
-            this._getallsp = GetAllProcedurename;
-            this._savesp = SaveProcedurename;
-        }
-        public DBClass(Type ClassType, string Name, string TableReference, string GetProcedureName, string GetAllProcedurename, string SaveProcedurename, string DeleteProcedurename)
-        {
-            this._classtype = ClassType;
-            this._classname = Name;
-            this._referencedtable = TableReference;
-            this._getsp = GetProcedureName;
-            this._getallsp = GetAllProcedurename;
-            this._savesp = SaveProcedurename;
-            this._deletesp = DeleteProcedurename;
-        }
-        public DBClass(Type ClassType, string Name, string TableReference, string GetProcedureName, string GetAllProcedurename, string SaveProcedurename, string DeleteProcedurename, string InsertProcedurename)
-        {
-            this._classtype = ClassType;
-            this._classname = Name;
-            this._referencedtable = TableReference;
-            this._getsp = GetProcedureName;
-            this._getallsp = GetAllProcedurename;
-            this._savesp = SaveProcedurename;
-            this._deletesp = DeleteProcedurename;
-            this._insertsp = InsertProcedurename;
         }
         #endregion
     }

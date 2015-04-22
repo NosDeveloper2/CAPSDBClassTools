@@ -98,6 +98,9 @@ namespace cmdCapsDBClassTools
                 options.Database = string.IsNullOrEmpty(builder.InitialCatalog) ? Properties.Settings.Default.DefaultDB : builder.InitialCatalog;
                 options.ExcludeTables = Properties.Settings.Default.DefaultExcludeTables;
                 options.ClassNamespace = Properties.Settings.Default.DefaultClassNamespace;
+                options.References = Properties.Settings.Default.DefaultReferences;
+                options.IndividualTable = Properties.Settings.Default.DefaultIndividualTable;
+                options.SingleClassType = (ObjectType)Properties.Settings.Default.DefaultObjectType;
             }
 
             if (CommandLine.Parser.Default.ParseArguments(args, options))
@@ -170,7 +173,7 @@ namespace cmdCapsDBClassTools
         [Option('r', "class-references", Required = false, HelpText = "Class references for output class files")]
         public string References { get; set; }
 
-        [Option('x', "tables-to-exclude", Required = false, HelpText = "Use quotes for more than one object and commas to delimit a list of tables to exclude class creation")]
+        [Option('x', "tables-to-exclude", Required = false, HelpText = "List of tables to exclude class creation. Always use quotes to begin and end, Use commas seperate tables in the list, and always Use a single quote(') at the beginning and end of each tablename. ")]
         public string ExcludeTables { get; set; }
 
         [Option('t', "individual-tables", Required = false, HelpText = "Single table to have classes created")]

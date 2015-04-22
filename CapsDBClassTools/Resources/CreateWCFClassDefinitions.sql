@@ -20,7 +20,7 @@ BEGIN
 
 	SELECT @Methods += '
         #region '+@TableName+'
-        public IList<'+@TableName+'> Get'+@TableName+'(int id)
+        public IList<'+@TableName+'> Get'+@TableName+'()
         {
             try
             {
@@ -32,7 +32,7 @@ BEGIN
             }
         }
 
-        public Agency Get'+@TableName+'(int id)
+        public '+@TableName+' Get'+@TableName+'(int id)
         {
             try
             {
@@ -44,11 +44,11 @@ BEGIN
             }
         }
 
-        public int Insert'+@TableName+'('+@TableName+' '+LOWER(@TableName)+')
+        public '+@TableName+' Insert'+@TableName+'('+@TableName+' '+LOWER(@TableName)+')
         {
             try
             {
-                return new '+@TableName+'Controller().Post'+@TableName+'('+LOWER(@TableName)+').'+@TableName+'ID;
+                return new '+@TableName+'Controller().Post'+@TableName+'('+LOWER(@TableName)+');
             }
             catch (Exception ex)
             {
@@ -67,37 +67,22 @@ BEGIN
                 throw ex;
             }
         }
-
-        public int Delete'+@TableName+'(int id)
-        {
-            try
-            {
-                return new '+@TableName+'Controller().Delete'+@TableName+'(id);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         #endregion
 	'
 
 	SELECT @IMethods += '
         #region '+@TableName+'
         [OperationContract]
-        public IList<'+@TableName+'> Get'+@TableName+'();
+        IList<'+@TableName+'> Get'+@TableName+'();
 
         [OperationContract]
-        public '+@TableName+' Get'+@TableName+'(int id);
+        '+@TableName+' Get'+@TableName+'(int id);
 
         [OperationContract]
-        public int Insert'+@TableName+'('+@TableName+' '+LOWER(@TableName)+');
+        '+@TableName+' Insert'+@TableName+'('+@TableName+' '+LOWER(@TableName)+');
 
         [OperationContract]
-        public '+@TableName+' Update'+@TableName+'(int id, '+@TableName+' '+LOWER(@TableName)+');
-
-        [OperationContract]
-        public int Delete'+@TableName+'(int id);
+        '+@TableName+' Update'+@TableName+'(int id, '+@TableName+' '+LOWER(@TableName)+');
         #endregion
 '
 
@@ -112,6 +97,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using '+@NameSpace+'.Model;
+using '+@NameSpace+'.Controllers;
 '+COALESCE(@References, '')+'
 
 namespace '+@NameSpace+'
@@ -129,6 +116,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using '+@NameSpace+'.Model;
 '+COALESCE(@References, '')+'
 
 namespace '+@NameSpace+'
@@ -142,7 +130,7 @@ namespace '+@NameSpace+'
 
 EXECUTE master.dbo.PrintMaxString @WcfClass
 INSERT INTO @Objects(ObjectName, ObjectDefinition, ObjectType)
-VALUES('WCFService.svc', @WcfClass, 4) /*4==WCF Class*/
+VALUES('WCFService', @WcfClass, 4) /*4==WCF Class*/
 
 EXECUTE master.dbo.PrintMaxString @IWcfClass
 INSERT INTO @Objects(ObjectName, ObjectDefinition, ObjectType)

@@ -53,7 +53,7 @@ namespace cmdCapsDBClassTools.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("\'CLRDataTypeConversions\', \'INS_Company\', \'INS_Service\', \'INS_OutOfStateNAIC\', \'IN" +
-            "S_NAIC\', \'INS_ContactNAICLink\'")]
+            "S_NAIC\', \'INS_ContactNAICLink\', \'INS_Contact\'")]
         public string DefaultExcludeTables {
             get {
                 return ((string)(this["DefaultExcludeTables"]));
@@ -66,6 +66,33 @@ namespace cmdCapsDBClassTools.Properties {
         public string DefaultClassNamespace {
             get {
                 return ((string)(this["DefaultClassNamespace"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DefaultIndividualTable {
+            get {
+                return ((string)(this["DefaultIndividualTable"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int DefaultObjectType {
+            get {
+                return ((int)(this["DefaultObjectType"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DefaultReferences {
+            get {
+                return ((string)(this["DefaultReferences"]));
             }
         }
     }

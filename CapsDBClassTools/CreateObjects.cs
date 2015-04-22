@@ -120,7 +120,7 @@ namespace CapsDBClassTools
         {
             try
             {
-                DBConnection.DBConnection db = new DBConnection.DBConnection(ConnectionString);
+                Connection db = new Connection(ConnectionString);
                 var builder = new SqlConnectionStringBuilder(ConnectionString);
                 List<DbParameter> Params = new List<DbParameter>(){
                 new DbParameter(){
