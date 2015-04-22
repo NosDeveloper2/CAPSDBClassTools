@@ -81,10 +81,10 @@ BEGIN
 
 	SELECT @IMethods += '
         #region '+@TableName+'
-        [OperationContract]
+        [OperationContract(Name="GetAll'+@TableName+'")]
         IList<'+@TableName+'> Get'+@TableName+'();
 
-        [OperationContract]
+        [OperationContract(Name="Get'+@TableName+'")]
         '+@TableName+' Get'+@TableName+'('+@GetParms+');
 
         [OperationContract]
