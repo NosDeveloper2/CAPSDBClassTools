@@ -1,4 +1,4 @@
-﻿public static class GetClassText
+﻿public static class GetDBConnectionClassText
 {
     private static string attribute = DBConnection.Properties.Resources.Attributes;
     private static string connection = DBConnection.Properties.Resources.Connection;

@@ -197,7 +197,7 @@ namespace CapsDBClassTools
                     {
                         ObjectId=1000,
                         ObjectName = "Connection",
-                        ObjectDefinition=GetClassText.Connection,
+                        ObjectDefinition=GetDBConnectionClassText.Connection,
                         ObjectType=(int)ObjectType.Default
                     }
                 );
@@ -208,7 +208,7 @@ namespace CapsDBClassTools
                     {
                         ObjectId = 1001,
                         ObjectName = "Attributes",
-                        ObjectDefinition = GetClassText.Attribute,
+                        ObjectDefinition = GetDBConnectionClassText.Attribute,
                         ObjectType = (int)ObjectType.Default
                     }
                 );
