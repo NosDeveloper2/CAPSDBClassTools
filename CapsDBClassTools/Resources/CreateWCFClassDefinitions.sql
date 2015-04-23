@@ -132,6 +132,7 @@ using '+@NameSpace+'.Model;
 
 namespace '+@NameSpace+'
 {
+	[ServiceContract]
     public interface IWCFService
     {
         '+@IMethods+'

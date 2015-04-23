@@ -1,4 +1,4 @@
-﻿using DBConnection;
+﻿//using DBConnection;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -189,6 +189,29 @@ namespace CapsDBClassTools
                 combine = tableinfoscript + Properties.Resources.CreateCrudProcedureDefinitions;
                 classes.AddRange(db.ExecuteList<GeneratedObjects>(combine, Params, System.Data.CommandType.Text));
                 combine = string.Empty;
+
+
+                //Create Connection File so others can use it directly(or modify it if needed)
+                classes.Add(
+                    new GeneratedObjects()
+                    {
+                        ObjectId=1000,
+                        ObjectName = "Connection",
+                        ObjectDefinition=GetClassText.Connection,
+                        ObjectType=(int)ObjectType.Default
+                    }
+                );
+
+                //Create Attributes File so others can use it directly(or modify it if needed)
+                classes.Add(
+                    new GeneratedObjects()
+                    {
+                        ObjectId = 1001,
+                        ObjectName = "Attributes",
+                        ObjectDefinition = GetClassText.Attribute,
+                        ObjectType = (int)ObjectType.Default
+                    }
+                );
 
                 //Return everything
                 return classes;
