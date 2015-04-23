@@ -50,7 +50,6 @@ BEGIN
 using System;
 using System.Collections.Generic;
 using System.Data;
-using DBConnection;
 '+ISNULL(@References, '')+'
 
 namespace '+@NameSpace+'.Model
