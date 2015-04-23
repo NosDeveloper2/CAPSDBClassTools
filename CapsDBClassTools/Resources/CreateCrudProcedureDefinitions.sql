@@ -111,6 +111,8 @@ BEGIN
 	*/
 	/*Delete Procedure*/
 	SELECT @deleteProcDef = '
+USE '+@Database+'
+GO
 IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = ''proc_'+@TableName+'_Delete'' AND ROUTINE_SCHEMA = ''dbo'')
 BEGIN
 	DROP PROCEDURE [dbo].[proc_'+@TableName+'_Delete]
@@ -131,6 +133,8 @@ GO
 
 	/*Get Procedure*/
 	SELECT @getProcDef = '
+USE '+@Database+'
+GO
 IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = ''proc_'+@TableName+'_Get'' AND ROUTINE_SCHEMA = ''dbo'')
 BEGIN
 	DROP PROCEDURE [dbo].[proc_'+@TableName+'_Get]
@@ -151,6 +155,8 @@ GO
 
 	/* Get All Procedure*/
 	SELECT @getallProcDef = '
+USE '+@Database+'
+GO
 IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = ''proc_'+@TableName+'_GetAll'' AND ROUTINE_SCHEMA = ''dbo'')
 BEGIN
 	DROP PROCEDURE [dbo].[proc_'+@TableName+'_GetAll]
@@ -168,6 +174,8 @@ GO
 
 	/* Insert Procedure*/
 	SELECT @insertProcDef = '
+USE '+@Database+'
+GO
 IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = ''proc_'+@TableName+'_Insert'' AND ROUTINE_SCHEMA = ''dbo'')
 BEGIN
 	DROP PROCEDURE [dbo].[proc_'+@TableName+'_Insert]
@@ -190,6 +198,8 @@ GO
 
 	/* Update Procedure*/
 	SELECT @updateProcDef = '
+USE '+@Database+'
+GO
 IF EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = ''proc_'+@TableName+'_Update'' AND ROUTINE_SCHEMA = ''dbo'')
 BEGIN
 	DROP PROCEDURE [dbo].[proc_'+@TableName+'_Update]
@@ -259,6 +269,7 @@ GO
 	SET @WhereList = NULL
 	SET @KeyParams = NULL
 	SET @AllParams = NULL
+    SET @SetList = NULL
 END
 
 SELECT *
