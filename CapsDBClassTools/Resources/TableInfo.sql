@@ -81,7 +81,7 @@ CREATE TABLE #CLRDataTypes
 	Scale INT
 )
 INSERT INTO #CLRDataTypes
-VALUES(1,'BIGINT','BigInt','Int64',1,8,19,0),
+VALUES(1,'BIGINT','BigInt','long',1,8,19,0),
 (2,'BINARY','Binary','Byte[]',0,8000,0,0),
 (3,'BIT','Bit','Boolean',1,1,1,0),
 (4,'CHAR','Char','String',1,8000,0,0),
@@ -92,7 +92,7 @@ VALUES(1,'BIGINT','BigInt','Int64',1,8,19,0),
 (9,'DECIMAL','Decimal','Decimal',1,17,38,38),
 (10,'FLOAT','Float','Double',1,8,53,0),
 (11,'IMAGE','Image','Byte[]',0,16,0,0),
-(12,'INT','Int','Int32',1,4,10,0),
+(12,'INT','Int','int',1,4,10,0),
 (13,'MONEY','Money','Decimal',1,8,19,4),
 (14,'NCHAR','NChar','String',1,8000,0,0),
 (15,'NTEXT','NText','Byte[]',0,16,0,0),
