@@ -34,39 +34,12 @@ namespace cmdCapsDBClassTools.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DORResources")]
-        public string DefaultDB {
-            get {
-                return ((string)(this["DefaultDB"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("[Encrypt:Data Source=caps-sqldev1.caps.ua.edu;User ID=sa;Password=Si9r1e1n]")]
-        public string DefaultConn {
-            get {
-                return ((string)(this["DefaultConn"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("\'sysdiagrams\',\'CLRDataTypeConversions\', \'INS_Company\', \'INS_Service\', \'INS_OutOfS" +
             "tateNAIC\', \'INS_NAIC\', \'INS_ContactNAICLink\', \'INS_Contact\', \'LUT_VIMS_To_Regist" +
             "ration_Mapping\'")]
         public string DefaultExcludeTables {
             get {
                 return ((string)(this["DefaultExcludeTables"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DORResources")]
-        public string DefaultClassNamespace {
-            get {
-                return ((string)(this["DefaultClassNamespace"]));
             }
         }
         
@@ -94,6 +67,34 @@ namespace cmdCapsDBClassTools.Properties {
         public string DefaultReferences {
             get {
                 return ((string)(this["DefaultReferences"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PersonalizedTags")]
+        public string DefaultDB {
+            get {
+                return ((string)(this["DefaultDB"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("[Encrypt:Data Source=caps-sqldev1;Initial Catalog=PersonalizedTags;User ID=sa;Pas" +
+            "sword=Si9r1e1n]")]
+        public string DefaultConn {
+            get {
+                return ((string)(this["DefaultConn"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PersonalizedTags")]
+        public string DefaultClassNamespace {
+            get {
+                return ((string)(this["DefaultClassNamespace"]));
             }
         }
     }

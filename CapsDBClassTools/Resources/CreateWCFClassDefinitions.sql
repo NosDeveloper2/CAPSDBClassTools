@@ -27,7 +27,7 @@ BEGIN
 	WHERE TableID = @listID
 		AND key_ordinal IS NOT NULL
 
-	SELECT @Methods += '
+	SELECT @Methods += ISNULL('
         #region '+@TableName+'
         public IList<'+@TableName+'> Get'+@TableName+'()
         {
@@ -77,9 +77,9 @@ BEGIN
             }
         }
         #endregion
-	'
+', '')
 
-	SELECT @IMethods += '
+	SELECT @IMethods += ISNULL('
         #region '+@TableName+'
         [OperationContract(Name="GetAll'+@TableName+'")]
         IList<'+@TableName+'> Get'+@TableName+'();
@@ -93,7 +93,7 @@ BEGIN
         [OperationContract]
         '+@TableName+' Update'+@TableName+'('+@GetParms+', '+@TableName+' '+LOWER(@TableName)+');
         #endregion
-'
+', '')
 
 	SET @listID -= 1
 	SET @TableName = NULL

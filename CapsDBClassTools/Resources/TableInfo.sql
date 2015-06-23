@@ -24,7 +24,8 @@ DECLARE @tableinfo VARCHAR(MAX) = '
 		C.CHARACTER_MAXIMUM_LENGTH AS ColMaxLength,
 		CLR.[Precision],
 		CLR.Scale,
-		ixc.key_ordinal
+		ixc.key_ordinal,
+		sc.is_identity
 	FROM (
 		SELECT TOP 100 PERCENT
 			ROW_NUMBER() OVER(ORDER BY TABLE_NAME DESC) AS TableID,
@@ -133,7 +134,8 @@ DECLARE @TableInfoList TABLE
 	ColMaxLength INT,
 	[Precision] INT,
 	Scale INT,
-	Key_Ordinal INT
+	Key_Ordinal INT,
+	is_identity BIT
 )
 INSERT INTO @TableInfoList
 EXEC(@tableinfo)

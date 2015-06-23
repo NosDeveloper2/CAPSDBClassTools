@@ -5,17 +5,8 @@
     <Setting Name="DefaultFileLocation" Type="System.String" Scope="Application">
       <Value Profile="(Default)">D:\Testing\TestCrudAndRefresh</Value>
     </Setting>
-    <Setting Name="DefaultDB" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">DORResources</Value>
-    </Setting>
-    <Setting Name="DefaultConn" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">[Encrypt:Data Source=caps-sqldev1.caps.ua.edu;User ID=sa;Password=Si9r1e1n]</Value>
-    </Setting>
     <Setting Name="DefaultExcludeTables" Type="System.String" Scope="Application">
       <Value Profile="(Default)">'sysdiagrams','CLRDataTypeConversions', 'INS_Company', 'INS_Service', 'INS_OutOfStateNAIC', 'INS_NAIC', 'INS_ContactNAICLink', 'INS_Contact', 'LUT_VIMS_To_Registration_Mapping'</Value>
-    </Setting>
-    <Setting Name="DefaultClassNamespace" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">DORResources</Value>
     </Setting>
     <Setting Name="DefaultIndividualTable" Type="System.String" Scope="Application">
       <Value Profile="(Default)" />
@@ -25,6 +16,15 @@
     </Setting>
     <Setting Name="DefaultReferences" Type="System.String" Scope="Application">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DefaultDB" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">PersonalizedTags</Value>
+    </Setting>
+    <Setting Name="DefaultConn" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">[Encrypt:Data Source=caps-sqldev1;Initial Catalog=PersonalizedTags;User ID=sa;Password=Si9r1e1n]</Value>
+    </Setting>
+    <Setting Name="DefaultClassNamespace" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">PersonalizedTags</Value>
     </Setting>
   </Settings>
 </SettingsFile>

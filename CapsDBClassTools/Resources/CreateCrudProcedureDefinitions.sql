@@ -10,13 +10,13 @@ DECLARE @SetList VARCHAR(MAX)
 DECLARE @KeyParams VARCHAR(MAX)
 DECLARE @AllParams VARCHAR(MAX)
 DECLARE @InsertParams VARCHAR(MAX)
+DECLARE @InsertList VARCHAR(MAX)
 
 DECLARE @deleteProcDef VARCHAR(MAX)
 DECLARE @getProcDef VARCHAR(MAX)
 DECLARE @getallProcDef VARCHAR(MAX)
 DECLARE @insertProcDef VARCHAR(MAX)
 DECLARE @updateProcDef VARCHAR(MAX)
-
 
 DECLARE @listID INT
 SELECT @listID = MAX(TableID)
@@ -57,9 +57,7 @@ BEGIN
 							END
 						),
 		/*Column List*/
-		@ColList = COALESCE(@ColList + ',' + @CRLF + @tab + ColumnName, ColumnName),
-		/*Insert Parameters List*/
-		@InsertParams = COALESCE(@InsertParams + ', @' + ColumnName, '@'+ColumnName)
+		@ColList = COALESCE(@ColList + ',' + @CRLF + @tab + ColumnName, ColumnName)
 	FROM @TableInfoList
 	WHERE TableID = @listID
 
@@ -106,6 +104,12 @@ BEGIN
 	WHERE TableID = @listID
 		AND ISNULL(key_ordinal, 0) >= 1
 
+	/*Cannot insert into identity column*/
+	SELECT @InsertParams = COALESCE(@InsertParams + ', @' + ColumnName, '@'+ColumnName),
+		@InsertList = COALESCE(@InsertList + ', ' + ColumnName, ColumnName)
+	FROM @TableInfoList
+	WHERE is_identity = 0
+
 	/*
 	 Create definitions
 	*/
@@ -144,7 +148,8 @@ GO
 CREATE PROCEDURE [dbo].[proc_'+@TableName+'_Get]
 (
 	'+@KeyParams+'
-)AS
+)
+AS
 SET NOCOUNT ON
 
 SELECT '+@ColList+'
@@ -190,7 +195,7 @@ SET NOCOUNT ON
 
 IF NOT EXISTS(SELECT * FROM [dbo].['+@TableName+'] WHERE '+@WhereList+')
 BEGIN
-	INSERT INTO [dbo].['+@TableName+']('+REPLACE(REPLACE(@ColList, @crlf, ' '), @tab, '')+')
+	INSERT INTO [dbo].['+@TableName+']('+@InsertList+')
 	VALUES('+@InsertParams+')
 END
 GO
@@ -270,6 +275,7 @@ GO
 	SET @KeyParams = NULL
 	SET @AllParams = NULL
     SET @SetList = NULL
+	SET @InsertList = NULL
 END
 
 SELECT *
