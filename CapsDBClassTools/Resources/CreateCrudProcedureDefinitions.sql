@@ -108,7 +108,8 @@ BEGIN
 	SELECT @InsertParams = COALESCE(@InsertParams + ', @' + ColumnName, '@'+ColumnName),
 		@InsertList = COALESCE(@InsertList + ', ' + ColumnName, ColumnName)
 	FROM @TableInfoList
-	WHERE is_identity = 0
+	WHERE TableID = @listID
+		AND is_identity = 0
 
 	/*
 	 Create definitions
