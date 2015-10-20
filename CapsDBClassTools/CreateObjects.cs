@@ -213,6 +213,16 @@ namespace CapsDBClassTools
                     }
                 );
 
+                classes.Add(
+                    new GeneratedObjects()
+                    {
+                        ObjectId = 1002,
+                        ObjectName = "DTO",
+                        ObjectDefinition = Properties.Resources.RestfulRepository.Replace("$ClassNamespace$", ClassNamespace),
+                        ObjectType = (int)ObjectType.DTOObject
+                    }
+                );
+
                 //Return everything
                 return classes;
             }

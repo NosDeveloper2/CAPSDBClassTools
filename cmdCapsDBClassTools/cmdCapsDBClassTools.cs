@@ -101,6 +101,7 @@ namespace cmdCapsDBClassTools
                 options.References = Properties.Settings.Default.DefaultReferences;
                 options.IndividualTable = Properties.Settings.Default.DefaultIndividualTable;
                 options.SingleClassType = (ObjectType)Properties.Settings.Default.DefaultObjectType;
+                options.SeperateCRUD = Properties.Settings.Default.DefaultSeperateCRUD;
             }
 
             if (CommandLine.Parser.Default.ParseArguments(args, options))

@@ -22,7 +22,8 @@ namespace CapsDBClassTools
         CRUDModelClass = 3,
         WCFClass = 4,
         StoredProcedure = 5,
-        IWCFClass = 6
+        IWCFClass = 6,
+        DTOObject = 7
     }
 
     public class ObjectTypeFileExtensions
@@ -101,6 +102,9 @@ namespace CapsDBClassTools
                 case (int)ObjectType.IWCFClass:
                     extensiontype = ObjectType.IWCFClass;
                     break;
+                case (int)ObjectType.DTOObject:
+                    extensiontype = ObjectType.DTOObject;
+                    break;
                 default:
                     extensiontype = ObjectType.Default;
                     break;
@@ -144,6 +148,9 @@ namespace CapsDBClassTools
                     break;
                 case ObjectType.IWCFClass:
                     extensionfolder = "IWCFClass";
+                    break;
+                case ObjectType.DTOObject:
+                    extensionfolder = "DTOObject";
                     break;
                 default:
                     extensionfolder = "Other";

@@ -1,0 +1,189 @@
+﻿using Newtonsoft.Json;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+
+namespace $ClassNamespace$
+{
+    /// <summary>
+    /// Interface to REST service repository
+    /// </summary>
+    public interface IRestfulRepository
+    {
+        /// <summary>
+        /// Template method for retrieving data from a REST service
+        /// </summary>
+        /// <typeparam name="T">Data transmission object</typeparam>
+        /// <param name="query">REST request URL</param>
+        /// <returns>Response from service</returns>
+        T Get<T>(string requestUrl);
+        /// <summary>
+        /// Template method for inserting data using a REST service
+        /// </summary>
+        /// <typeparam name="T">Data transmission object</typeparam>
+        /// <param name="query">REST request URL</param>
+        /// <param name="entity">Entity to be inserted</param>
+        /// <returns>Inserted Entity</returns>
+        T Insert<T>(string requestUrl, T entity);
+        /// <summary>
+        /// Template method for updating data using a REST service
+        /// </summary>
+        /// <typeparam name="T">data transmission object</typeparam>
+        /// <param name="query">REST request URL</param>
+        /// <param name="entity">Entity to be updated</param>
+        /// <returns>bool</returns>
+        bool Update<T>(string requestUrl, T entity);
+        /// <summary>
+        /// Template method for deleting data over a REST service
+        /// </summary>
+        /// <param name="query">Web API request URL</param>
+        /// <returns>bool</returns>
+        bool Delete(string requestUrl);
+    }
+
+    /// <summary>
+    /// Retrieves, inserts, updates, and deletes records from database
+    /// </summary>
+    public class Repository : IRestfulRepository
+    {
+        /// <summary>
+        /// Template method for retrieving data from a REST service
+        /// </summary>
+        /// <typeparam name="T">Data transmission object</typeparam>
+        /// <param name="query">REST request URL</param>
+        /// <returns>Response from service</returns>
+        public T Get<T>(string requestUrl)
+        {
+            T result = default(T);
+
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    result = JsonConvert.DeserializeObject<T>(client.DownloadString(requestUrl));
+                }
+            }
+            catch (Exception)
+            {
+                result = default(T);
+            }
+
+            return result;
+        }
+        /// <summary>
+        /// Template method for inserting data using a REST service
+        /// </summary>
+        /// <typeparam name="T">Data transmission object</typeparam>
+        /// <param name="query">REST request URL</param>
+        /// <param name="entity">Entity to be inserted</param>
+        /// <returns>Inserted Entity</returns>
+        public T Insert<T>(string requestUrl, T entity)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    string entityJson = JsonConvert.SerializeObject(entity);
+
+                    StringContent requestBody = new StringContent(entityJson, new UTF8Encoding(), "application/json");
+
+                    HttpResponseMessage response = client.PostAsync(requestUrl, requestBody).Result;
+
+                    response.EnsureSuccessStatusCode();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        T result = response.Content.ReadAsAsync<T>().Result;
+
+                        return result;
+                    }
+                    else
+                    {
+                        return default(T);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return default(T);
+            }
+        }
+        /// <summary>
+        /// Template method for updating data using a REST service
+        /// </summary>
+        /// <typeparam name="T">data transmission object</typeparam>
+        /// <param name="query">REST request URL</param>
+        /// <param name="entity">Entity to be updated</param>
+        /// <returns>bool</returns>
+        public bool Update<T>(string requestUrl, T entity)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    string entityJson = JsonConvert.SerializeObject(entity);
+
+                    StringContent requestBody = new StringContent(entityJson, new UTF8Encoding(), "application/json");
+
+                    HttpResponseMessage response = client.PutAsync(requestUrl, requestBody).Result;
+
+                    response.EnsureSuccessStatusCode();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// Template method for deleting data over a REST service
+        /// </summary>
+        /// <param name="query">Web API request URL</param>
+        /// <returns>bool</returns>
+        public bool Delete(string requestUrl)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage response = client.DeleteAsync(requestUrl).Result;
+
+                    response.EnsureSuccessStatusCode();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+}
