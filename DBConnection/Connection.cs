@@ -1,4 +1,8 @@
-﻿using System;
+﻿// based off of code found on the following developer Tomas Bosak:
+// Tomas Bosak
+// http://yojimbo87.github.io/2010/03/21/sql-sp-mapper.html
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
